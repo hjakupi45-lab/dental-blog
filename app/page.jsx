@@ -4,30 +4,35 @@ const softwareCategories = [
   {
     category: 'Crown, Bridge & Restorative CAD',
     icon: '🦷',
+    image: '/software/restorative-cad.jpg',
     description: 'Industry-standard design tools for crowns, bridges, veneers, and full-arch restorations.',
     items: ['Exocad DentalCAD', '3Shape Dental System', 'InLab (Dentsply Sirona)', 'Dental Wings / DWOS', 'ChairsideCAD'],
   },
   {
     category: 'Implant Planning & Guided Surgery',
     icon: '🩺',
+    image: '/software/implant-guided.jpg',
     description: 'Sub-millimeter CBCT alignment and surgical guide design for predictable placements.',
     items: ['Exoplan', '3Shape Implant Studio', 'BlueSkyPlan', 'RealGUIDE', 'CoDiagnostiX'],
   },
   {
     category: 'Orthodontics & Clear Aligners',
     icon: '📐',
+    image: '/software/ortho-aligner.jpg',
     description: 'Direct aligner export, staging, virtual setup, and indirect bonding trays.',
     items: ['ArchForm', 'Maestro 3D', 'OnyxCeph', 'NemoCast', '3Shape Ortho Analyzer'],
   },
   {
     category: 'CAM, Milling & Production',
     icon: '⚙️',
+    image: '/software/cam-milling.jpg',
     description: 'High-speed nesting, continuous calculation, and 5-axis toolpath optimization.',
     items: ['MillBox', 'HyperDent', 'Sum3D'],
   },
   {
     category: 'Maxillofacial, Surgery & Diagnostics',
     icon: '💀',
+    image: '/software/maxillofacial-cmf.jpg',
     description: 'Craniomaxillofacial planning, virtual osteotomy, cephalometrics, and 3D imaging.',
     items: ['CMF 7 (Materialise / Mimics)', 'Planmeca Romexis'],
   },
@@ -84,68 +89,108 @@ export default function HomePage() {
         </a>
       )}
 
-      {/* Complete Software Showcase Catalog */}
+      {/* Complete Software Showcase Catalog with Visual Previews */}
       <section id="software-catalog" style={{ marginBottom: '5rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <div className="badge" style={{ marginBottom: '0.75rem' }}>Full Catalog Available</div>
           <h2 style={{ fontSize: '2.25rem', fontWeight: 800 }}>Available CAD/CAM Software Solutions</h2>
           <p style={{ color: '#9ca3af', maxWidth: '650px', margin: '0.5rem auto 0 auto' }}>
-            Full installations, permanent activation, and 24/7 dedicated technical support at the lowest prices.
+            Permanent activations, module add-ons, and 24/7 dedicated technical support at unbeatable prices.
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '2rem' }}>
           {softwareCategories.map((cat) => (
-            <div key={cat.category} className="card-hover" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>{cat.icon}</div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: '#fff' }}>
-                {cat.category}
-              </h3>
-              <p style={{ color: '#9ca3af', fontSize: '0.9rem', marginBottom: '1.25rem', flex: 1 }}>
-                {cat.description}
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.5rem' }}>
-                {cat.items.map((item) => (
-                  <span key={item} style={{
-                    fontSize: '0.78rem',
-                    padding: '4px 8px',
-                    borderRadius: '6px',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    color: '#e5e7eb'
-                  }}>
-                    {item}
-                  </span>
-                ))}
-              </div>
-              <a
-                href="https://t.me/CADCAMSOFTWARES"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  textAlign: 'center',
-                  background: 'rgba(6, 182, 212, 0.12)',
-                  border: '1px solid rgba(6, 182, 212, 0.3)',
-                  color: '#06b6d4',
-                  padding: '10px',
-                  borderRadius: '10px',
+            <div key={cat.category} className="card-hover" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              {/* Software UI Screenshot Preview */}
+              <div style={{ position: 'relative', height: '210px', overflow: 'hidden', borderBottom: '1px solid var(--border-color)' }}>
+                <img
+                  src={cat.image}
+                  alt={cat.category}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.4s ease'
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                />
+                <div style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  background: 'rgba(10, 15, 29, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  padding: '6px 12px',
+                  borderRadius: '9999px',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  fontSize: '0.8rem',
                   fontWeight: 600,
-                  fontSize: '0.875rem'
-                }}
-              >
-                Inquire on Telegram →
-              </a>
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  <span>{cat.icon}</span> Live Preview
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <h3 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: '#fff' }}>
+                  {cat.category}
+                </h3>
+                <p style={{ color: '#9ca3af', fontSize: '0.9rem', marginBottom: '1.25rem', flex: 1 }}>
+                  {cat.description}
+                </p>
+
+                {/* Software Badges */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.75rem' }}>
+                  {cat.items.map((item) => (
+                    <span key={item} style={{
+                      fontSize: '0.78rem',
+                      padding: '5px 10px',
+                      borderRadius: '8px',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      color: '#e5e7eb',
+                      fontWeight: 500
+                    }}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+
+                <a
+                  href="https://t.me/CADCAMSOFTWARES"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textAlign: 'center',
+                    background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15))',
+                    border: '1px solid rgba(6, 182, 212, 0.35)',
+                    color: '#06b6d4',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  Inquire on Telegram →
+                </a>
+              </div>
             </div>
           ))}
         </div>
 
         {/* Global CTA Banner */}
-        <div className="cta-box" style={{ marginTop: '2.5rem' }}>
-          <h3 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+        <div className="cta-box" style={{ marginTop: '3.5rem' }}>
+          <h3 style={{ fontSize: '1.85rem', fontWeight: 800, marginBottom: '0.5rem' }}>
             Need Any Other CAD/CAM or Dental Software?
           </h3>
           <p style={{ color: '#9ca3af', maxWidth: '650px', margin: '0 auto 1.5rem auto' }}>
-            We carry all versions, complete modules, and library add-ons with fast remote installation and ongoing assistance.
+            We carry all versions, complete modules, and library add-ons with fast remote installation and ongoing 24/7 assistance.
           </p>
           <a
             href="https://t.me/CADCAMSOFTWARES"
@@ -156,9 +201,10 @@ export default function HomePage() {
               background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
               color: '#fff',
               fontWeight: 700,
-              padding: '12px 30px',
+              padding: '13px 32px',
               borderRadius: '9999px',
-              fontSize: '1rem'
+              fontSize: '1rem',
+              boxShadow: '0 8px 25px rgba(6, 182, 212, 0.3)'
             }}
           >
             Contact @CADCAMSOFTWARES on Telegram
