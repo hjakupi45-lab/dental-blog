@@ -107,14 +107,7 @@ export default function HomePage() {
                 <img
                   src={cat.image}
                   alt={cat.category}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    transition: 'transform 0.4s ease'
-                  }}
-                  onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  className="software-preview-img"
                 />
                 <div style={{
                   position: 'absolute',
