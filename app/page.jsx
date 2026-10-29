@@ -1,5 +1,38 @@
 import { getAllPosts } from '../lib/posts';
 
+const softwareCategories = [
+  {
+    category: 'Crown, Bridge & Restorative CAD',
+    icon: '🦷',
+    description: 'Industry-standard design tools for crowns, bridges, veneers, and full-arch restorations.',
+    items: ['Exocad DentalCAD', '3Shape Dental System', 'InLab (Dentsply Sirona)', 'Dental Wings / DWOS', 'ChairsideCAD'],
+  },
+  {
+    category: 'Implant Planning & Guided Surgery',
+    icon: '🩺',
+    description: 'Sub-millimeter CBCT alignment and surgical guide design for predictable placements.',
+    items: ['Exoplan', '3Shape Implant Studio', 'BlueSkyPlan', 'RealGUIDE', 'CoDiagnostiX'],
+  },
+  {
+    category: 'Orthodontics & Clear Aligners',
+    icon: '📐',
+    description: 'Direct aligner export, staging, virtual setup, and indirect bonding trays.',
+    items: ['ArchForm', 'Maestro 3D', 'OnyxCeph', 'NemoCast', '3Shape Ortho Analyzer'],
+  },
+  {
+    category: 'CAM, Milling & Production',
+    icon: '⚙️',
+    description: 'High-speed nesting, continuous calculation, and 5-axis toolpath optimization.',
+    items: ['MillBox', 'HyperDent', 'Sum3D'],
+  },
+  {
+    category: 'Maxillofacial, Surgery & Diagnostics',
+    icon: '💀',
+    description: 'Craniomaxillofacial planning, virtual osteotomy, cephalometrics, and 3D imaging.',
+    items: ['CMF 7 (Materialise / Mimics)', 'Planmeca Romexis'],
+  },
+];
+
 export default function HomePage() {
   const posts = getAllPosts();
   const featured = posts[0];
@@ -8,21 +41,21 @@ export default function HomePage() {
   return (
     <div className="container" style={{ padding: '3rem 1.5rem' }}>
       {/* Hero Section */}
-      <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 4rem auto' }}>
+      <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 4rem auto' }}>
         <div className="badge" style={{ marginBottom: '1rem' }}>
-          Updated Daily • 100% Automated
+          Updated Daily • 100% Automated Digital Dentistry
         </div>
-        <h1 style={{ fontSize: '2.75rem', fontWeight: 800, marginBottom: '1rem', lineHeight: 1.2 }}>
-          Mastering Modern <span style={{ background: 'linear-gradient(to right, #06b6d4, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Digital Dentistry</span>
+        <h1 style={{ fontSize: '2.85rem', fontWeight: 800, marginBottom: '1rem', lineHeight: 1.2 }}>
+          Your Complete Hub for <span style={{ background: 'linear-gradient(to right, #06b6d4, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>CAD/CAM & Digital Dentistry</span>
         </h1>
         <p style={{ color: '#9ca3af', fontSize: '1.15rem' }}>
-          Daily expert guides on BlueSkyPlan implant guides, ArchForm direct 3D aligner workflows, and CMF 7 virtual surgical planning.
+          Daily expert workflows, setup guides, and unbeatable deals on the world’s leading dental design and manufacturing software.
         </p>
       </div>
 
       {/* Featured Article */}
       {featured && (
-        <a href={`/blog/${featured.slug}`} style={{ display: 'block', marginBottom: '4rem' }}>
+        <a href={`/blog/${featured.slug}`} style={{ display: 'block', marginBottom: '4.5rem' }}>
           <div className="card-hover" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
             <div style={{ height: '320px', overflow: 'hidden' }}>
               <img
@@ -51,10 +84,94 @@ export default function HomePage() {
         </a>
       )}
 
+      {/* Complete Software Showcase Catalog */}
+      <section id="software-catalog" style={{ marginBottom: '5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <div className="badge" style={{ marginBottom: '0.75rem' }}>Full Catalog Available</div>
+          <h2 style={{ fontSize: '2.25rem', fontWeight: 800 }}>Available CAD/CAM Software Solutions</h2>
+          <p style={{ color: '#9ca3af', maxWidth: '650px', margin: '0.5rem auto 0 auto' }}>
+            Full installations, permanent activation, and 24/7 dedicated technical support at the lowest prices.
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+          {softwareCategories.map((cat) => (
+            <div key={cat.category} className="card-hover" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>{cat.icon}</div>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: '#fff' }}>
+                {cat.category}
+              </h3>
+              <p style={{ color: '#9ca3af', fontSize: '0.9rem', marginBottom: '1.25rem', flex: 1 }}>
+                {cat.description}
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.5rem' }}>
+                {cat.items.map((item) => (
+                  <span key={item} style={{
+                    fontSize: '0.78rem',
+                    padding: '4px 8px',
+                    borderRadius: '6px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: '#e5e7eb'
+                  }}>
+                    {item}
+                  </span>
+                ))}
+              </div>
+              <a
+                href="https://t.me/CADCAMSOFTWARES"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  textAlign: 'center',
+                  background: 'rgba(6, 182, 212, 0.12)',
+                  border: '1px solid rgba(6, 182, 212, 0.3)',
+                  color: '#06b6d4',
+                  padding: '10px',
+                  borderRadius: '10px',
+                  fontWeight: 600,
+                  fontSize: '0.875rem'
+                }}
+              >
+                Inquire on Telegram →
+              </a>
+            </div>
+          ))}
+        </div>
+
+        {/* Global CTA Banner */}
+        <div className="cta-box" style={{ marginTop: '2.5rem' }}>
+          <h3 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+            Need Any Other CAD/CAM or Dental Software?
+          </h3>
+          <p style={{ color: '#9ca3af', maxWidth: '650px', margin: '0 auto 1.5rem auto' }}>
+            We carry all versions, complete modules, and library add-ons with fast remote installation and ongoing assistance.
+          </p>
+          <a
+            href="https://t.me/CADCAMSOFTWARES"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block',
+              background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
+              color: '#fff',
+              fontWeight: 700,
+              padding: '12px 30px',
+              borderRadius: '9999px',
+              fontSize: '1rem'
+            }}
+          >
+            Contact @CADCAMSOFTWARES on Telegram
+          </a>
+        </div>
+      </section>
+
       {/* Recent Posts Grid */}
       {recentPosts.length > 0 && (
-        <>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '2rem' }}>Recent Articles</h2>
+        <section>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 700 }}>Recent Articles</h2>
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem' }}>
             {recentPosts.map((post) => (
               <a key={post.slug} href={`/blog/${post.slug}`} className="card-hover" style={{ display: 'flex', flexDirection: 'column' }}>
@@ -80,34 +197,8 @@ export default function HomePage() {
               </a>
             ))}
           </div>
-        </>
+        </section>
       )}
-
-      {/* Software Showcase Banner */}
-      <div id="about" className="cta-box">
-        <h2 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.75rem' }}>
-          Available CAD/CAM Software Solutions
-        </h2>
-        <p style={{ color: '#9ca3af', maxWidth: '650px', margin: '0 auto 1.5rem auto' }}>
-          Get full installations and continuous 24/7 technical support for <strong>BlueSkyPlan</strong>, <strong>ArchForm</strong>, and <strong>CMF 7</strong> at the lowest prices on the market.
-        </p>
-        <a
-          href="https://t.me/CADCAMSOFTWARES"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-block',
-            background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
-            color: '#fff',
-            fontWeight: 700,
-            padding: '12px 28px',
-            borderRadius: '9999px',
-            fontSize: '1rem'
-          }}
-        >
-          Contact Support on Telegram (@CADCAMSOFTWARES)
-        </a>
-      </div>
     </div>
   );
 }

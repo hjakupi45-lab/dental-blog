@@ -59,7 +59,7 @@ export default function PostPage({ params }) {
       </h1>
 
       <div style={{ color: '#9ca3af', fontSize: '0.9rem', marginBottom: '2rem' }}>
-        Published on {post.date} • Digital Dentistry AI Specialist
+        Published on {post.date} • Digital Dentistry CAD/CAM Specialist
       </div>
 
       <div style={{ borderRadius: '16px', overflow: 'hidden', height: '380px', marginBottom: '2.5rem', border: '1px solid var(--border-color)' }}>
@@ -76,14 +76,17 @@ export default function PostPage({ params }) {
         dangerouslySetInnerHTML={{ __html: `<p style="margin-bottom: 1.25rem;">${renderMarkdown(post.content)}</p>` }}
       />
 
-      {/* Software Call-to-Action Card */}
+      {/* Full Software Call-to-Action Card */}
       <div className="cta-box">
         <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-          Need BlueSkyPlan, ArchForm, or CMF 7?
+          Looking for Full CAD/CAM & Dental Software Setups?
         </h3>
-        <p style={{ color: '#9ca3af', fontSize: '0.95rem', marginBottom: '1.25rem' }}>
-          We provide full software setups, seamless installation, and 24/7 dedicated technical support at the lowest prices.
+        <p style={{ color: '#9ca3af', fontSize: '0.95rem', marginBottom: '1rem' }}>
+          We provide full software packages, module add-ons, and 24/7 technical support for <strong>Exocad, 3Shape, MillBox, HyperDent, RealGUIDE, InLab, Romexis, ArchForm, BlueSkyPlan, CMF 7</strong>, and more.
         </p>
+        <div style={{ fontSize: '0.85rem', color: '#06b6d4', marginBottom: '1.25rem' }}>
+          ✓ Unbeatable Low Prices • ✓ Permanent Activation • ✓ 24/7 Remote Installation
+        </div>
         <a
           href="https://t.me/CADCAMSOFTWARES"
           target="_blank"
@@ -93,7 +96,7 @@ export default function PostPage({ params }) {
             background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
             color: '#fff',
             fontWeight: 700,
-            padding: '10px 24px',
+            padding: '11px 26px',
             borderRadius: '9999px',
             fontSize: '0.95rem'
           }}

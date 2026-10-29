@@ -43,14 +43,14 @@ def get_next_topic():
 def generate_article_with_gemini(topic: str) -> dict:
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     
-    prompt = f"""You are a senior dental technology specialist and CAD/CAM expert.
+    prompt = f"""You are a senior digital dentistry consultant, dental technician, and CAD/CAM expert.
 Write an authoritative, engaging, and SEO-optimized blog article about the topic: "{topic}".
 
 Guidelines:
-- Naturally highlight the benefits of modern digital software like BlueSkyPlan (for implant guides), ArchForm (for clear aligners), or CMF 7 (for maxillofacial surgery) where relevant.
-- Structure with clear H2 and H3 subheadings, key takeaways, practical clinical tips, and a short FAQ section.
+- Naturally highlight practical workflows and clinical benefits of relevant software suites, such as Exocad (DentalCAD, ChairsideCAD, exoplan), 3Shape (Dental System, Ortho Analyzer, Implant Studio), MillBox, HyperDent, Sum3D, RealGUIDE, CoDiagnostiX, InLab, Romexis, NemoCast, Maestro 3D, OnyxCeph, ArchForm, BlueSkyPlan, or CMF 7.
+- Structure with clear H2 and H3 subheadings, key clinical takeaways, troubleshooting advice, and a short FAQ section.
 - Write 800 - 1200 words.
-- Conclude with a helpful Call To Action encouraging clinics and dental labs to adopt digital workflows with reliable technical support.
+- Conclude with a helpful Call To Action encouraging clinics and dental labs to reach out on Telegram (@CADCAMSOFTWARES) for software setups, permanent activation, and dedicated 24/7 technical support.
 
 Output MUST be valid JSON with this exact schema (no markdown formatting around JSON):
 {{
