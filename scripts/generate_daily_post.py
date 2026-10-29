@@ -1,9 +1,9 @@
 import os
 import json
 import re
+import time
 from datetime import datetime
-import urllib.request
-import urllib.parse
+import requests
 
 # Configuration
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -18,6 +18,8 @@ FALLBACK_IMAGES = [
     "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=1200&q=80",
     "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80",
 ]
+
+MODELS_TO_TRY = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3-flash-preview"]
 
 def get_next_topic():
     if not os.path.exists(TOPICS_FILE):
@@ -41,8 +43,6 @@ def get_next_topic():
     return "Advances in 3D Dental Planning and Aligner Fabrication"
 
 def generate_article_with_gemini(topic: str) -> dict:
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
-    
     prompt = f"""You are a senior digital dentistry consultant, dental technician, and CAD/CAM expert.
 Write an authoritative, engaging, and SEO-optimized blog article about the topic: "{topic}".
 
@@ -67,16 +67,24 @@ Output MUST be valid JSON with this exact schema (no markdown formatting around 
         "generationConfig": {"responseMimeType": "application/json"}
     }
     
-    req = urllib.request.Request(
-        url,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"}
-    )
-    
-    with urllib.request.urlopen(req) as response:
-        result = json.loads(response.read().decode("utf-8"))
-        raw_text = result["candidates"][0]["content"]["parts"][0]["text"]
-        return json.loads(raw_text)
+    last_err = None
+    for model in MODELS_TO_TRY:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}"
+        for attempt in range(3):
+            try:
+                print(f"Requesting content using {model} (attempt {attempt + 1})...")
+                response = requests.post(url, json=payload, timeout=60)
+                if response.status_code == 200:
+                    result = response.json()
+                    raw_text = result["candidates"][0]["content"]["parts"][0]["text"]
+                    return json.loads(raw_text)
+                print(f"{model} returned HTTP {response.status_code}, retrying...")
+                time.sleep(2)
+            except Exception as e:
+                last_err = e
+                time.sleep(2)
+                
+    raise RuntimeError(f"All models failed to generate content: {last_err}")
 
 def main():
     if not GEMINI_API_KEY:
@@ -90,7 +98,7 @@ def main():
     post_data = generate_article_with_gemini(topic)
     
     today = datetime.now().strftime("%Y-%m-%d")
-    clean_slug = re.sub(r'[^a-z0-9\-]', '', post_data["slug"].lower().replace(' ', '-'))
+    clean_slug = re.sub(r'[^a-z0-9\-]', '', post_data.get("slug", "post").lower().replace(' ', '-'))
     filename = f"{today}-{clean_slug}.md"
     file_path = os.path.join(POSTS_DIR, filename)
     
@@ -98,14 +106,18 @@ def main():
     image_idx = sum(ord(c) for c in today) % len(FALLBACK_IMAGES)
     cover_image = FALLBACK_IMAGES[image_idx]
     
+    clean_title = post_data.get('title', 'Dental CAD/CAM Insight').replace('"', "'")
+    clean_desc = post_data.get('description', '').replace('"', "'")
+    tags_json = json.dumps(post_data.get('tags', ['Dentistry', 'CAD/CAM']))
+    
     # Create Markdown with Frontmatter
     frontmatter = f"""---
-title: "{post_data['title'].replace('"', "'")}"
+title: "{clean_title}"
 date: "{today}"
 slug: "{clean_slug}"
-description: "{post_data['description'].replace('"', "'')}"
+description: "{clean_desc}"
 coverImage: "{cover_image}"
-tags: {json.dumps(post_data.get('tags', ['Dentistry', 'CAD/CAM']))}
+tags: {tags_json}
 ---
 
 {post_data['content']}
