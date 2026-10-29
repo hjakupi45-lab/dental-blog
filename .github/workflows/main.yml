@@ -1,0 +1,35 @@
+name: Daily Dental Post Generator
+
+on:
+  schedule:
+    # Runs everyday at 08:00 UTC (9:00 AM Central European Time)
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-and-post:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate New Dental Post
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python scripts/generate_daily_post.py
+
+      - name: Commit and Push New Post
+        run: |
+          git config --global user.name "Dental-Bot"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add content/posts/ scripts/topics.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto: New daily dental post [skip ci]" && git push)
