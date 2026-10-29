@@ -1,0 +1,120 @@
+import os
+import json
+import re
+from datetime import datetime
+import urllib.request
+import urllib.parse
+
+# Configuration
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+POSTS_DIR = os.path.join(os.path.dirname(__file__), "..", "content", "posts")
+TOPICS_FILE = os.path.join(os.path.dirname(__file__), "topics.json")
+
+# Royalty-free dental cover images from Unsplash (rotated daily)
+FALLBACK_IMAGES = [
+    "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80",
+]
+
+def get_next_topic():
+    if not os.path.exists(TOPICS_FILE):
+        return "The Future of Digital Dental CAD/CAM Workflows in 2026"
+    
+    with open(TOPICS_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    topics = data.get("topics", [])
+    used_topics = data.get("used", [])
+    
+    # Find first unused topic
+    for topic in topics:
+        if topic not in used_topics:
+            used_topics.append(topic)
+            with open(TOPICS_FILE, "w", encoding="utf-8") as f:
+                json.dump({"topics": topics, "used": used_topics}, f, indent=2)
+            return topic
+            
+    # If all used, loop back
+    return "Advances in 3D Dental Planning and Aligner Fabrication"
+
+def generate_article_with_gemini(topic: str) -> dict:
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+    
+    prompt = f"""You are a senior dental technology specialist and CAD/CAM expert.
+Write an authoritative, engaging, and SEO-optimized blog article about the topic: "{topic}".
+
+Guidelines:
+- Naturally highlight the benefits of modern digital software like BlueSkyPlan (for implant guides), ArchForm (for clear aligners), or CMF 7 (for maxillofacial surgery) where relevant.
+- Structure with clear H2 and H3 subheadings, key takeaways, practical clinical tips, and a short FAQ section.
+- Write 800 - 1200 words.
+- Conclude with a helpful Call To Action encouraging clinics and dental labs to adopt digital workflows with reliable technical support.
+
+Output MUST be valid JSON with this exact schema (no markdown formatting around JSON):
+{{
+  "title": "SEO Catchy Title",
+  "slug": "url-friendly-slug-with-hyphens",
+  "description": "Engaging 1-2 sentence meta description for Google search (under 160 characters).",
+  "tags": ["Tag1", "Tag2", "Tag3"],
+  "content": "Full Markdown article text here (use ## for headers, bullet points, etc.)"
+}}
+"""
+    
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"responseMimeType": "application/json"}
+    }
+    
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
+    
+    with urllib.request.urlopen(req) as response:
+        result = json.loads(response.read().decode("utf-8"))
+        raw_text = result["candidates"][0]["content"]["parts"][0]["text"]
+        return json.loads(raw_text)
+
+def main():
+    if not GEMINI_API_KEY:
+        raise ValueError("Missing GEMINI_API_KEY environment variable!")
+        
+    os.makedirs(POSTS_DIR, exist_ok=True)
+    
+    topic = get_next_topic()
+    print(f"Generating post for topic: {topic}")
+    
+    post_data = generate_article_with_gemini(topic)
+    
+    today = datetime.now().strftime("%Y-%m-%d")
+    clean_slug = re.sub(r'[^a-z0-9\-]', '', post_data["slug"].lower().replace(' ', '-'))
+    filename = f"{today}-{clean_slug}.md"
+    file_path = os.path.join(POSTS_DIR, filename)
+    
+    # Pick a cover image based on date hash
+    image_idx = sum(ord(c) for c in today) % len(FALLBACK_IMAGES)
+    cover_image = FALLBACK_IMAGES[image_idx]
+    
+    # Create Markdown with Frontmatter
+    frontmatter = f"""---
+title: "{post_data['title'].replace('"', "'")}"
+date: "{today}"
+slug: "{clean_slug}"
+description: "{post_data['description'].replace('"', "'')}"
+coverImage: "{cover_image}"
+tags: {json.dumps(post_data.get('tags', ['Dentistry', 'CAD/CAM']))}
+---
+
+{post_data['content']}
+"""
+    
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(frontmatter)
+        
+    print(f"Successfully generated post: {file_path}")
+
+if __name__ == "__main__":
+    main()
